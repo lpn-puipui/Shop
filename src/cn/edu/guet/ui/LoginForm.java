@@ -1,8 +1,11 @@
 package cn.edu.guet.ui;
 
+import cn.edu.guet.util.MD5;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import javax.swing.*;
 /*
@@ -35,11 +38,11 @@ public class LoginForm extends JFrame {
                     public void actionPerformed(ActionEvent actionEvent) {
                         String username=textField1.getText();//获取用户名
                         String password=textField2.getText();//获取密码
-
+                        Statement stmt=null;//SQL语句对象，拼SQL
+                        //String sql="SELECT * FROM Lusers WHERE username='"+username+"' AND password='"+password+"'";
+                        String sql="SELECT password FROM Lusers WHERE username='"+username+"'";
                         Connection conn=null;
                         String url="jdbc:oracle:thin:@47.113.217.47:1521:orcl";
-                        Statement stmt=null;//SQL语句对象，拼SQL
-                        String sql="SELECT * FROM Lusers WHERE username='"+username+"' AND password='"+password+"'";
                         System.out.println("即将执行的sql："+sql);
                         ResultSet rs=null;
                         try {
@@ -47,17 +50,21 @@ public class LoginForm extends JFrame {
                             conn= DriverManager.getConnection(url,"aly","aly1234");
                             stmt=conn.createStatement();
                             rs=stmt.executeQuery(sql);
-                            if(rs.next()){
-                                System.out.println("登录成功");
-                                //显示售货
+                            rs.next();
+                            String encodePassword=rs.getString(1);//从数据库取出的加密后的密码
+                            boolean isSuccess= MD5.checkpassword(password,encodePassword);
+                            if(isSuccess){
+                                System.out.println("Successed");
                             }else{
-                                System.out.println("登录失败");
+                                System.out.println("failed");
                             }
 
                         } catch (ClassNotFoundException ee) {
                             ee.printStackTrace();
                         } catch (SQLException throwables) {
                             throwables.printStackTrace();
+                        }catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
                         }
                         finally {
                             //释放资源：数据库连接很昂贵
@@ -68,7 +75,6 @@ public class LoginForm extends JFrame {
                             } catch (SQLException throwables) {
                                 throwables.printStackTrace();
                             }
-//hhhhh
                         }
                     }
                 }

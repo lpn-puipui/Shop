@@ -15,3 +15,6 @@ INSERT INTO Lusers VALUES(111111,'lpn','lpn1234');
 SELECT COUNT (*) FROM Lusers WHERE username='lpn' AND password='lpn1234';
 --返回结果为1则用户名和密码匹配
 ```
+
+- +LC0OF7WjIleq6AjGUccgA==
+- bHBuMTIzNA==
