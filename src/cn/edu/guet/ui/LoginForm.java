@@ -1,3 +1,5 @@
+package cn.edu.guet.ui;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,7 +76,14 @@ public class LoginForm extends JFrame {
 
 
         button2 = new JButton();//Exit
-
+        button2.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        //actionEvent.setSource(EXIT_ON_CLOSE);
+                    }
+                }
+        );
         //======== this ========
         setResizable(false);
         var contentPane = getContentPane();
