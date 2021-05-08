@@ -53,11 +53,13 @@ public class MD5 {
         else
             return false;
     }
-
+/*
     public static void main(String[] args) throws Exception{
         System.out.println(encode("lpn1234"));
         boolean b=checkpassword("lpn1234","bHBuMTIzNA==");
         System.out.println(b);
     }
+
+ */
 }
 

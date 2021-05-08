@@ -29,8 +29,8 @@ public class LoginForm extends JFrame {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         label1 = new JLabel();
         label2 = new JLabel();
-        textField1 = new JTextField();
-        textField2 = new JTextField();
+        textField1 = new JTextField("lpn");
+        textField2 = new JTextField("lpn1234");
         button1 = new JButton();//Login
         button1.addActionListener(
                 new ActionListener() {
@@ -43,7 +43,7 @@ public class LoginForm extends JFrame {
                         String sql="SELECT password FROM Lusers WHERE username='"+username+"'";
                         Connection conn=null;
                         String url="jdbc:oracle:thin:@47.113.217.47:1521:orcl";
-                        System.out.println("即将执行的sql："+sql);
+                        System.out.println("sql:"+sql);
                         ResultSet rs=null;
                         try {
                             Class.forName("oracle.jdbc.driver.OracleDriver");//
@@ -55,14 +55,17 @@ public class LoginForm extends JFrame {
                             boolean isSuccess= MD5.checkpassword(password,encodePassword);
                             if(isSuccess){
                                 System.out.println("Successed");
+                                MainForm mf=new MainForm();
+                                mf.setVisible(true);
+                                setVisible(false);
                             }else{
-                                System.out.println("failed");
+                                System.out.println("Password Error!");
                             }
 
                         } catch (ClassNotFoundException ee) {
                             ee.printStackTrace();
                         } catch (SQLException throwables) {
-                            throwables.printStackTrace();
+                            System.out.println("This User does not exist!");
                         }catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
@@ -82,14 +85,8 @@ public class LoginForm extends JFrame {
 
 
         button2 = new JButton();//Exit
-        button2.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        //actionEvent.setSource(EXIT_ON_CLOSE);
-                    }
-                }
-        );
+
+
         //======== this ========
         setResizable(false);
         var contentPane = getContentPane();
