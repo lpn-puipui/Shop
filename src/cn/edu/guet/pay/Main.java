@@ -20,6 +20,7 @@ import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
 import com.alipay.demo.trade.utils.Utils;
+import com.alipay.demo.trade.utils.ZxingUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +33,7 @@ import java.util.*;
  * sdk和demo的意见和问题反馈请联系：liuyang.kly@alipay.com
  */
 public class Main {
-    private static Log log = LogFactory.getLog(Main.class);
+    private static Log                  log = LogFactory.getLog(Main.class);
 
     // 支付宝当面付2.0服务
     private static AlipayTradeService   tradeService;
@@ -88,10 +89,10 @@ public class Main {
         //        main.test_monitor_schedule_logic();
 
         // 测试当面付2.0支付（使用未集成交易保障接口的当面付2.0服务）
-        //        main.test_trade_pay(tradeService);
+                //main.test_trade_pay(tradeService,);
 
         // 测试查询当面付2.0交易
-        //        main.test_trade_query();
+                //main.test_trade_query();
 
         // 测试当面付2.0退货
         //        main.test_trade_refund();
@@ -100,6 +101,9 @@ public class Main {
         main.test_trade_precreate();
     }
 
+    public void test_trade(String authCode){
+        test_trade_pay(tradeService,authCode);
+    }
     // 系统商的调用样例，填写了所有系统商商需要填写的字段
     public void test_monitor_sys() {
         // 系统商使用的交易信息格式，json字符串类型
@@ -177,21 +181,21 @@ public class Main {
     }
 
     // 测试当面付2.0支付
-    public void test_trade_pay(AlipayTradeService service) {
+    public void test_trade_pay(AlipayTradeService service,String authCode) {
         // (必填) 商户网站订单系统中唯一订单号，64个字符以内，只能包含字母、数字、下划线，
         // 需保证商户系统端不能重复，建议通过数据库sequence生成，
         String outTradeNo = "tradepay" + System.currentTimeMillis()
                             + (long) (Math.random() * 10000000L);
 
         // (必填) 订单标题，粗略描述用户的支付目的。如“xxx品牌xxx门店消费”
-        String subject = "xxx品牌xxx门店当面付消费";
+        String subject = "陈立鹏品牌xxx门店当面付消费";
 
         // (必填) 订单总金额，单位为元，不能超过1亿元
         // 如果同时传入了【打折金额】,【不可打折金额】,【订单总金额】三者,则必须满足如下条件:【订单总金额】=【打折金额】+【不可打折金额】
-        String totalAmount = "0.01";
+        String totalAmount = "10000";
 
         // (必填) 付款条码，用户支付宝钱包手机app点击“付款”产生的付款条码
-        String authCode = "用户自己的支付宝付款码"; // 条码示例，286648048691290423
+        //String authCode = "280712272143371567"; // 条码示例，286648048691290423
         // (可选，根据需要决定是否使用) 订单可打折金额，可以配合商家平台配置折扣活动，如果订单部分商品参与打折，可以将部分商品总价填写至此字段，默认全部商品可打折
         // 如果该值未传入,但传入了【订单总金额】,【不可打折金额】 则该值默认为【订单总金额】- 【不可打折金额】
         //        String discountableAmount = "1.00"; //
@@ -214,7 +218,7 @@ public class Main {
         String storeId = "test_store_id";
 
         // 业务扩展参数，目前可添加由支付宝分配的系统商编号(通过setSysServiceProviderId方法)，详情请咨询支付宝技术支持
-        String providerId = "2088100200300400500";
+        String providerId = "2088621955627409";
         ExtendParams extendParams = new ExtendParams();
         extendParams.setSysServiceProviderId(providerId);
 
@@ -242,7 +246,7 @@ public class Main {
             .setUndiscountableAmount(undiscountableAmount).setBody(body).setOperatorId(operatorId)
             .setExtendParams(extendParams).setSellerId(sellerId)
             .setGoodsDetailList(goodsDetailList).setTimeoutExpress(timeoutExpress);
-
+        System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
         // 调用tradePay方法获取当面付应答
         AlipayF2FPayResult result = service.tradePay(builder);
         switch (result.getTradeStatus()) {
@@ -267,7 +271,7 @@ public class Main {
     // 测试当面付2.0查询订单
     public void test_trade_query() {
         // (必填) 商户订单号，通过此商户订单号查询当面付的交易状态
-        String outTradeNo = "tradepay14817938139942440181";
+        String outTradeNo = "tradeprecreate1618994865587954427";
 
         // 创建查询请求builder，设置请求参数
         AlipayTradeQueryRequestBuilder builder = new AlipayTradeQueryRequestBuilder()
@@ -354,11 +358,11 @@ public class Main {
                             + (long) (Math.random() * 10000000L);
 
         // (必填) 订单标题，粗略描述用户的支付目的。如“xxx品牌xxx门店当面付扫码消费”
-        String subject = "xxx品牌xxx门店当面付扫码消费";
+        String subject = "桂电小卖铺";
 
         // (必填) 订单总金额，单位为元，不能超过1亿元
         // 如果同时传入了【打折金额】,【不可打折金额】,【订单总金额】三者,则必须满足如下条件:【订单总金额】=【打折金额】+【不可打折金额】
-        String totalAmount = "0.01";
+        String totalAmount = "100";
 
         // (可选) 订单不可打折金额，可以配合商家平台配置折扣活动，如果酒水不参与打折，则将对应金额填写至此字段
         // 如果该值未传入,但传入了【订单总金额】,【打折金额】,则该值默认为【订单总金额】-【打折金额】
@@ -412,11 +416,11 @@ public class Main {
                 AlipayTradePrecreateResponse response = result.getResponse();
                 dumpResponse(response);
 
-                // 需要修改为运行机器上的路径G:\Lanqiao
+                // 需要修改为运行机器上的路径
                 String filePath = String.format("D:\\qr-%s.png",
                     response.getOutTradeNo());
                 log.info("filePath:" + filePath);
-                //                ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
+                                ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
                 break;
 
             case FAILED:
