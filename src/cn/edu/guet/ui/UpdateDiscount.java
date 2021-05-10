@@ -83,7 +83,7 @@ public class UpdateDiscount extends JFrame {
             Class.forName("oracle.jdbc.driver.OracleDriver");//
             conn = DriverManager.getConnection(url, "scott", "tiger");
             pstmt = conn.prepareStatement(sql);
-            pstmt.setFloat(1, (float) 0.9);
+            pstmt.setFloat(1, (float) 0.85);
             pstmt.executeUpdate();//Ìí¼ÓÊý¾Ý
         } catch (ClassNotFoundException ee) {
             ee.printStackTrace();
