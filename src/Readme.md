@@ -18,3 +18,5 @@ SELECT COUNT (*) FROM Lusers WHERE username='lpn' AND password='lpn1234';
 
 - +LC0OF7WjIleq6AjGUccgA==
 - bHBuMTIzNA==
+
+- update commodity set discount=0.9;

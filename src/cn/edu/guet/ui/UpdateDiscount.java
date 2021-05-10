@@ -23,7 +23,7 @@ public class UpdateDiscount extends JFrame {
     public UpdateDiscount() {
         initComponents();
     }
-
+    //全部查询
     public Object[][] queryData() {
         //因为Swing里也有一个组件叫List
         java.util.List<Goods> list = new ArrayList<Goods>();
@@ -73,6 +73,34 @@ public class UpdateDiscount extends JFrame {
         return data;
     }
 
+    public void updateDiscount(){
+        Connection conn = null;
+        String url = "jdbc:oracle:thin:@47.113.217.47:1521:orcl";
+        PreparedStatement pstmt = null;//SQL语句对象
+        String sql = "update commodity set discount=?";//占位符
+        System.out.println("即将执行的sql：" + sql);
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");//
+            conn = DriverManager.getConnection(url, "scott", "tiger");
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setFloat(1, (float) 0.9);
+            pstmt.executeUpdate();//添加数据
+        } catch (ClassNotFoundException ee) {
+            ee.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            //释放资源：数据库连接很昂贵
+            try {
+                pstmt.close();
+                conn.close();//关连接
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+        }
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         button1 = new JButton();
@@ -107,6 +135,9 @@ public class UpdateDiscount extends JFrame {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
+                        //更新
+                        updateDiscount();
+                        //查询
                         DefaultTableModel tableModel = new DefaultTableModel(queryData(), head) {
                             public boolean isCellEditable(int row, int column) {
                                 return false;
